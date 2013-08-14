@@ -1,18 +1,18 @@
 %define		plugin	fineuploader
 Summary:	Multiple file upload plugin with progress-bar, drag-and-drop
 Name:		jquery-%{plugin}
-Version:	3.1
+Version:	3.7.1
 Release:	1
-License:	MIT, GPL v2 or LGPL v2
+License:	GPL v3
 Group:		Applications/WWW
-Source0:	https://github.com/valums/file-uploader/archive/%{version}.tar.gz?/%{plugin}-%{version}.tgz
-# Source0-md5:	0b8ec22531da912bb5637ae34abf24ba
-URL:		https://github.com/valums/file-uploader
+Source0:	https://github.com/Widen/fine-uploader/archive/%{version}.tar.gz?/%{plugin}-%{version}.tgz
+# Source0-md5:	a0d7c906c1cc4f1894659f43898f4347
+URL:		http://fineuploader.com/
 BuildRequires:	closure-compiler
 BuildRequires:	js
 BuildRequires:	unzip
 BuildRequires:	yuicompressor
-Requires:	jquery
+Requires:	jquery >= 1.5
 #Obsoletes:	js-ajax-upload
 #Obsoletes:	js-fileuploader
 BuildArch:	noarch
@@ -42,8 +42,7 @@ Requires:	%{name} = %{version}-%{release}
 Demonstrations and samples for %{plugin}.
 
 %prep
-%setup -qc
-mv file-uploader-%{version}/* .
+%setup -q -n fine-uploader-%{version}
 
 %build
 install -d build
@@ -58,9 +57,9 @@ for css in client/*.css; do
 %endif
 done
 
-# combine .js, based on build.gradle
-coreFiles=client/js/{header,util,button,uploader.basic,dnd,uploader,handler.base,handler.form,handler.xhr}.js
-jQueryPluginFiles=client/js/jquery-plugin.js
+# combine .js, based on Gruntfile.coffee
+coreFiles=client/js/{util,version,features,promise,button,paste,upload-data,uploader.basic,dnd,uploader,ajax.requester,deletefile.ajax.requester,window.receive.message,handler.{base,form,xhr},ui.handler.{events,click.drc,edit.filename,click.filename,focusin.filenameinput,focus.filenameinput}}.js
+jQueryPluginFiles=client/js/jquery-{plugin,dnd}.js
 
 cat $coreFiles > build/%{plugin}.js
 cat $coreFiles $jQueryPluginFiles > build/jquery.%{plugin}.js
